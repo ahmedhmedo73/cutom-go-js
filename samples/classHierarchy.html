@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html>
   <head>
     <meta charset="utf-8" />
     <meta
@@ -134,8 +134,9 @@
                 // Automatically lay out the diagram as a tree;
                 // separate trees are arranged vertically above each other.
                 layout: $(go.TreeLayout, {
-                  nodeSpacing: 40,
-                  layerSpacing: 100,
+                  nodeSpacing: 60,
+                  layerSpacing: 250,
+                  angle: 180,
                 }),
                 allowLink: false,
               }
@@ -153,16 +154,26 @@
                 $(
                   go.Panel,
                   "Auto",
-                  $(go.Shape, { fill: "#009EF6", stroke: null }),
+                  $(go.Shape, "RoundedRectangle", {
+                    fill: "white",
+                    stroke: "#4361EE",
+                    strokeWidth: 2,
+                    margin: 4,
+                  }),
                   $(
                     go.TextBlock,
                     {
                       font: "bold 13px Helvetica, bold Arial, sans-serif",
-                      stroke: "white",
-                      margin: 3,
+                      stroke: "#4361EE",
+                      margin: 15,
                     },
                     new go.Binding("text", "key")
                   )
+                ),
+                $(
+                  go.Panel, // this is underneath the "BODY"
+                  { margin: new go.Margin(18, 0, 0, -2) }, // always this height, even if the TreeExpanderButton is not visible
+                  $("TreeExpanderButton")
                 )
               )
             );
@@ -172,18 +183,19 @@
               go.Link,
               {
                 curve: go.Link.Bezier,
-                toEndSegmentLength: 30,
-                fromEndSegmentLength: 30,
+                toEndSegmentLength: 150,
+                fromEndSegmentLength: 150,
               },
-              $(go.Shape, { strokeWidth: 1.5 }),
               $(
                 go.Shape,
-                { toArrow: "Standard", strokeWidth: 0 },
-                // the Shape.fill color depends on whether Link.isHighlighted is true
-                new go.Binding("fill", "isHighlighted", (h) =>
-                  h ? "red" : "black"
-                ).ofObject()
-              ) // the link shape, with the default black stroke
+                { strokeWidth: 1 },
+                new go.Binding("stroke", "color")
+              ),
+              $(
+                go.Shape,
+                { toArrow: "OpenTriangle", strokeWidth: 1 },
+                new go.Binding("stroke", "color")
+              )
             );
 
             // Collect all of the data for the model of the class hierarchy
@@ -204,12 +216,293 @@
                 nodeDataArray.push({ key: k });
               } else {
                 // add a node for this class and a tree-parent reference to the base class name
-                nodeDataArray.push({ key: k, parent: base.className });
+                nodeDataArray.push({
+                  key: k,
+                  parent: base.className,
+                  color: "#4361EE",
+                });
               }
             }
-
+            const customData = [
+              {
+                key: "BODY",
+                name: "BODY BODY BODY BODY BODY BODY ",
+                __gohashid: 456,
+              },
+              {
+                key: "DIV",
+                name: "DIV",
+                parent: "BODY",
+                __gohashid: 457,
+              },
+              {
+                key: "SCRIPT",
+                name: "SCRIPT",
+                parent: "DIV",
+                __gohashid: 458,
+              },
+              {
+                key: "DIV (allSampleContent)",
+                name: "DIV (allSampleContent)",
+                parent: "DIV",
+                __gohashid: 459,
+              },
+              {
+                key: "SCRIPT (code)",
+                name: "SCRIPT (code)",
+                parent: "DIV (allSampleContent)",
+                __gohashid: 460,
+              },
+              {
+                key: "DIV (sample)",
+                name: "DIV (sample)",
+                parent: "DIV (allSampleContent)",
+                __gohashid: 461,
+              },
+              {
+                key: "DIV (myDiagramDiv)",
+                name: "DIV (myDiagramDiv)",
+                parent: "DIV (sample)",
+                __gohashid: 462,
+              },
+              {
+                key: "CANVAS",
+                name: "CANVAS",
+                parent: "DIV (myDiagramDiv)",
+                __gohashid: 463,
+              },
+              {
+                key: "DIV1",
+                name: "DIV1",
+                parent: "DIV (myDiagramDiv)",
+                __gohashid: 464,
+              },
+              {
+                key: "DIV2",
+                name: "DIV2",
+                parent: "DIV1",
+                __gohashid: 465,
+              },
+              {
+                key: "P",
+                name: "P",
+                parent: "DIV (sample)",
+                __gohashid: 466,
+              },
+              {
+                key: "P1",
+                name: "P1",
+                parent: "DIV (sample)",
+                __gohashid: 467,
+              },
+              {
+                key: "A",
+                name: "A",
+                parent: "P1",
+                __gohashid: 468,
+              },
+              {
+                key: "A1",
+                name: "A1",
+                parent: "P1",
+                __gohashid: 469,
+              },
+              {
+                key: "P (lastParagraph)",
+                name: "P (lastParagraph)",
+                parent: "DIV (sample)",
+                __gohashid: 470,
+              },
+              {
+                key: "DIV (otherInfo)",
+                name: "DIV (otherInfo)",
+                parent: "DIV (sample)",
+                __gohashid: 471,
+              },
+              {
+                key: "DIV (tableContainer)",
+                name: "DIV (tableContainer)",
+                parent: "DIV (otherInfo)",
+                __gohashid: 472,
+              },
+              {
+                key: "TABLE",
+                name: "TABLE",
+                parent: "DIV (tableContainer)",
+                __gohashid: 473,
+              },
+              {
+                key: "TBODY",
+                name: "TBODY",
+                parent: "TABLE",
+                __gohashid: 474,
+              },
+              {
+                key: "TR",
+                name: "TR",
+                parent: "TBODY",
+                __gohashid: 475,
+              },
+              {
+                key: "TH (firstHeader)",
+                name: "TH (firstHeader)",
+                parent: "TR",
+                __gohashid: 476,
+              },
+              {
+                key: "TH (secondHeader)",
+                name: "TH (secondHeader)",
+                parent: "TR",
+                __gohashid: 477,
+              },
+              {
+                key: "TR1",
+                name: "TR1",
+                parent: "TBODY",
+                __gohashid: 478,
+              },
+              {
+                key: "TD",
+                name: "TD",
+                parent: "TR1",
+                __gohashid: 479,
+              },
+              {
+                key: "TD1",
+                name: "TD1",
+                parent: "TR1",
+                __gohashid: 480,
+              },
+              {
+                key: "TR2",
+                name: "TR2",
+                parent: "TBODY",
+                __gohashid: 481,
+              },
+              {
+                key: "TD2",
+                name: "TD2",
+                parent: "TR2",
+                __gohashid: 482,
+              },
+              {
+                key: "TD3",
+                name: "TD3",
+                parent: "TR2",
+                __gohashid: 483,
+              },
+              {
+                key: "DIV (listContainer)",
+                name: "DIV (listContainer)",
+                parent: "DIV (otherInfo)",
+                __gohashid: 484,
+              },
+              {
+                key: "P2",
+                name: "P2",
+                parent: "DIV (listContainer)",
+                __gohashid: 485,
+              },
+              {
+                key: "UL (groceryList)",
+                name: "UL (groceryList)",
+                parent: "DIV (listContainer)",
+                __gohashid: 486,
+              },
+              {
+                key: "LI",
+                name: "LI",
+                parent: "UL (groceryList)",
+                __gohashid: 487,
+              },
+              {
+                key: "LI1",
+                name: "LI1",
+                parent: "UL (groceryList)",
+                __gohashid: 488,
+              },
+              {
+                key: "LI2",
+                name: "LI2",
+                parent: "UL (groceryList)",
+                __gohashid: 489,
+              },
+              {
+                key: "P3",
+                name: "P3",
+                parent: "DIV (otherInfo)",
+                __gohashid: 490,
+              },
+              {
+                key: "A2",
+                name: "A2",
+                parent: "P3",
+                __gohashid: 491,
+              },
+              {
+                key: "A3",
+                name: "A3",
+                parent: "P3",
+                __gohashid: 492,
+              },
+              {
+                key: "A4",
+                name: "A4",
+                parent: "P3",
+                __gohashid: 493,
+              },
+              {
+                key: "P4",
+                name: "P4",
+                parent: "DIV (sample)",
+                __gohashid: 494,
+              },
+              {
+                key: "P5",
+                name: "P5",
+                parent: "DIV (allSampleContent)",
+                __gohashid: 495,
+              },
+              {
+                key: "A5",
+                name: "A5",
+                parent: "P5",
+                __gohashid: 496,
+              },
+              {
+                key: "BUTTON",
+                name: "BUTTON",
+                parent: "DIV (allSampleContent)",
+                __gohashid: 497,
+              },
+              {
+                key: "BUTTON1",
+                name: "BUTTON1",
+                parent: "DIV (allSampleContent)",
+                __gohashid: 498,
+              },
+              {
+                key: "SCRIPT1",
+                name: "SCRIPT1",
+                parent: "BODY",
+                __gohashid: 499,
+              },
+              {
+                key: "SCRIPT2",
+                name: "SCRIPT2",
+                parent: "BODY",
+                __gohashid: 500,
+              },
+              {
+                key: "SCRIPT3",
+                name: "SCRIPT3",
+                parent: "BODY",
+                __gohashid: 501,
+              },
+            ];
+            
             // Create the model for the hierarchy diagram
-            diagram.model = new go.TreeModel(nodeDataArray);
+            diagram.model = new go.TreeModel(customData);
 
             // Now collect all node data that are singletons
             var singlesArray = []; // for classes that don't inherit from another class
@@ -218,7 +511,6 @@
                 singlesArray.push(node.data);
               }
             });
-
             // Remove the unconnected class nodes from the main Diagram
             diagram.model.removeNodeDataCollection(singlesArray);
 
